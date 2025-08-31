@@ -5,7 +5,7 @@ import chromadb
 import os
 
 app = Flask(__name__)
-CORS(app)  # Allow requests from Wix frontend
+CORS(app)
 
 # 🔑 OpenAI API key from environment variable
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -17,13 +17,12 @@ client = chromadb.CloudClient(
     database='edugram_ncert'
 )
 
-# Get or create your collection
 collection = client.get_or_create_collection("edugram_ncert")
 
-# ✅ Add sample NCERT Grade 7 content if empty
+# Add sample NCERT content if empty
 if len(collection.get()["ids"]) == 0:
     sample_chapters = [
-        "Chapter 1: Nutrition in Plants: Plants make their own food via photosynthesis. They absorb water and minerals from soil, carbon dioxide from air, and use sunlight to make glucose and oxygen."
+        "Chapter 1: Nutrition in Plants: Plants make their own food via photosynthesis..."
     ]
     for i, text in enumerate(sample_chapters):
         collection.add(
@@ -43,12 +42,10 @@ def ask():
         if not user_input:
             return jsonify({"answer": "Please provide a question."})
 
-        # 1️⃣ Query Chroma for relevant NCERT content
         results = collection.query(query_texts=[user_input], n_results=3)
         context_docs = results["documents"][0]
         context = "\n".join(context_docs) if context_docs else "No relevant NCERT content found."
 
-        # 2️⃣ Send context + question to OpenAI GPT
         prompt = f"""
         You are Edugram AI, a helpful tutor for students (Grade 7-12).
         Use the following NCERT material to answer the question.
