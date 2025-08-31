@@ -1,27 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edugram AI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edugram AI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #F3E8D8;
+      color: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      color: #BA8C49;
+    }
+
+    #question {
+      width: 60%;
+      max-width: 600px;
+      padding: 15px;
+      font-size: 1.2rem;
+      border: 2px solid #CBB594;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      background-color: #BA8C49;
+      color: #F3E8D8;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #CBB594;
+    }
+
+    #answer {
+      margin-top: 2rem;
+      width: 60%;
+      max-width: 600px;
+      font-size: 1.2rem;
+      line-height: 1.5;
+      border: 2px solid #CBB594;
+      border-radius: 10px;
+      padding: 15px;
+      background-color: #ffffff;
+    }
+  </style>
 </head>
 <body>
-    <h1>Edugram AI Tutor</h1>
-    <input id="question" type="text" placeholder="Ask me anything about NCERT..." style="width:300px;">
-    <button onclick="askQuestion()">Ask</button>
-    <p id="answer"></p>
+  <h1>Edugram AI</h1>
+  <input id="question" type="text" placeholder="Ask me anything about NCERT...">
+  <button onclick="askQuestion()">Ask</button>
+  <div id="answer"></div>
 
-    <script>
-        async function askQuestion() {
-            const question = document.getElementById("question").value;
-            const response = await fetch("/ask", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ question })
-            });
-            const data = await response.json();
-            document.getElementById("answer").innerText = data.answer;
-        }
-    </script>
+  <script>
+    async function askQuestion() {
+      const question = document.getElementById("question").value;
+      const response = await fetch("/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+      const data = await response.json();
+      document.getElementById("answer").innerText = data.answer;
+    }
+  </script>
 </body>
 </html>
