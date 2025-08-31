@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edugram AI</title>
+</head>
+<body>
+    <h1>Edugram AI Tutor</h1>
+    <input id="question" type="text" placeholder="Ask me anything about NCERT..." style="width:300px;">
+    <button onclick="askQuestion()">Ask</button>
+    <p id="answer"></p>
+
+    <script>
+        async function askQuestion() {
+            const question = document.getElementById("question").value;
+            const response = await fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question })
+            });
+            const data = await response.json();
+            document.getElementById("answer").innerText = data.answer;
+        }
+    </script>
+</body>
+</html>
