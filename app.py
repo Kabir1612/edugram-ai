@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import openai
 import chromadb
@@ -17,8 +17,20 @@ client = chromadb.CloudClient(
     database='edugram_ncert'
 )
 
-# Get your collection
-collection = client.get_collection("edugram_ncert")
+# Get or create your collection
+collection = client.get_or_create_collection("edugram_ncert")
+
+# ✅ Add sample NCERT Grade 7 content if empty
+if len(collection.get()["ids"]) == 0:
+    sample_chapters = [
+        "Chapter 1: Nutrition in Plants: Plants make their own food via photosynthesis. They absorb water and minerals from soil, carbon dioxide from air, and use sunlight to make glucose and oxygen."
+    ]
+    for i, text in enumerate(sample_chapters):
+        collection.add(
+            documents=[text],
+            metadatas=[{"chapter": i+1}],
+            ids=[f"doc_{i+1}"]
+        )
 
 @app.route("/")
 def index():
