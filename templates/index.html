@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Edugram AI</title>
+</head>
+<body>
+  <h1>Welcome to Edugram AI</h1>
+  <form id="ask-form">
+    <input type="text" id="question" placeholder="Ask a question..." style="width:300px;">
+    <button type="submit">Ask</button>
+  </form>
+  <div id="answer" style="margin-top:20px; font-weight:bold;"></div>
+
+  <script>
+    document.getElementById("ask-form").onsubmit = async (e) => {
+      e.preventDefault();
+      let q = document.getElementById("question").value;
+      let res = await fetch("/ask", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({question: q})
+      });
+      let data = await res.json();
+      document.getElementById("answer").innerText = data.answer;
+    }
+  </script>
+</body>
+</html>
